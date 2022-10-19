@@ -50,7 +50,7 @@
             <td class="py-4 px-6 max-w-lg text-justify">{{ cerpen.content }}</td>
             <td class="py-4 px-6">{{ moment(cerpen.created_at).format('DD MMMM YYYY') }}</td>
             <td class="py-4 px-6 text-right">
-              <span @click="deleteCerpen(cerpen.id)" class="font-medium cursor-pointer text-primary dark:text-blue-500 hover:underline">Delete User!</span>
+              <span @click="deleteCerpen(cerpen.id)" class="font-medium cursor-pointer text-primary dark:text-blue-500 hover:underline">Delete Cerpens!</span>
             </td>
           </tr>
         </tbody>
