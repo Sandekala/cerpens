@@ -1,6 +1,6 @@
 <template>
   <div class="container h-screen flex items-center">
-    <div class="border-[3px] border-primary rounded-md relative w-[450px] m-auto py-16 px-16">
+    <div class="border-[3px] border-primary bg-white rounded-md relative w-[450px] m-auto py-16 px-16">
       <div class="w-1/2 bg-primary rounded-md py-4 px-3 font-bold text-xl text-white text-center absolute -top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">Login</div>
       <form @submit.prevent="login" id="login" class="flex flex-col gap-3">
         <div class="relative">
@@ -47,7 +47,6 @@ const login = () => {
   axios
     .post(`${import.meta.env.VITE_APP_BASE_URL}/login`, field.value)
     .then((res) => {
-      console.log(res);
       localStorage.setItem('token', res.data.data.token);
       localStorage.setItem('name', res.data.data.name);
       localStorage.setItem('authorId', res.data.data.id);
@@ -57,7 +56,7 @@ const login = () => {
     .catch((err) => {
       console.log(err);
 
-      errMsg.value = 'Username or password is incorrect!';
+      errMsg.value = err.response.data.message;
       setTimeout(() => {
         errMsg.value = null;
       }, 3000);
@@ -67,7 +66,6 @@ const loginAdmin = () => {
   axios
     .post(`${import.meta.env.VITE_APP_BASE_URL}/loginAdmin`, field.value)
     .then((res) => {
-      console.log(res);
       localStorage.setItem('token', res.data.data.token);
       localStorage.setItem('name', res.data.data.name);
       localStorage.setItem('authorId', res.data.data.id);
@@ -75,11 +73,17 @@ const loginAdmin = () => {
       window.location.href = '/dashboard';
     })
     .catch((err) => {
-      console.log(err);
-      errMsg.value = "You aren't Admin";
-      setTimeout(() => {
-        errMsg.value = null;
-      }, 3000);
+      if (err.code == 'ERR_BAD_RESPONSE') {
+        errMsg.value = 'Error: Wrong email or password';
+        setTimeout(() => {
+          errMsg.value = null;
+        }, 3000);
+      } else {
+        errMsg.value = "You aren't Admin";
+        setTimeout(() => {
+          errMsg.value = null;
+        }, 3000);
+      }
     });
 };
 </script>

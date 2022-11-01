@@ -68,6 +68,7 @@ const dataUser = ref(null);
 const dataCerpens = ref(null);
 const dataUserLoad = ref(null);
 const dataCerpenLoad = ref(null);
+const token = localStorage.getItem('token');
 
 const admin = localStorage.getItem('admin');
 if (!admin) {
@@ -78,7 +79,11 @@ const deleteUser = (id) => {
   const confirm = window.confirm('Are you sure want to Delete this User?');
   if (confirm) {
     axios
-      .delete(`${import.meta.env.VITE_APP_BASE_URL}/user/${id}`)
+      .delete(`${import.meta.env.VITE_APP_BASE_URL}/user/${id}`, {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      })
       .then((res) => {
         window.alert('User Deleted!');
         window.location.href = '/dashboard';
@@ -90,7 +95,11 @@ const deleteCerpen = (id) => {
   const confirm = window.confirm('Are you sure want to Delete this Cerpen?');
   if (confirm) {
     axios
-      .delete(`${import.meta.env.VITE_APP_BASE_URL}/cerpen/${id}`)
+      .delete(`${import.meta.env.VITE_APP_BASE_URL}/cerpen/${id}`, {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      })
       .then((res) => {
         window.alert('Cerpen Deleted!');
         window.location.href = '/dashboard';
@@ -100,7 +109,11 @@ const deleteCerpen = (id) => {
 };
 
 axios
-  .get(`${import.meta.env.VITE_APP_BASE_URL}/user`)
+  .get(`${import.meta.env.VITE_APP_BASE_URL}/user`, {
+    headers: {
+      Authorization: 'Bearer ' + token,
+    },
+  })
   .then((res) => {
     dataUser.value = res.data.data;
     dataUserLoad.value = true;

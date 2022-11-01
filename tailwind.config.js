@@ -21,5 +21,5 @@ module.exports = {
       '2xl': '1320px',
     },
   },
-  plugins: [require('flowbite/plugin'), require('@tailwindcss/line-clamp')],
+  plugins: [require('flowbite/plugin'), require('@tailwindcss/line-clamp'), require('daisyui')],
 };

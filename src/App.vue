@@ -1,7 +1,7 @@
 <template>
   <div class="font-poppins text-black min-h-screen flex flex-col">
     <Navigation />
-    <router-view class="pt-32 pb-10 flex-1" />
+    <router-view class="pt-20 pb-10 flex-1 bg-[url('/bg.png')] bg-no-repeat" />
     <Footer />
   </div>
 </template>

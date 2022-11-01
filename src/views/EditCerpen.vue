@@ -5,18 +5,20 @@
       <div>
         <input required v-model="form.title" type="text" name="title" id="title" class="focus:outline-none focus:ring-0 h-24 placeholder:font-bold block m-auto border-none placeholder-shown" />
       </div>
-      <div class="flex justify-center items-center w-full">
+      <div class="flex justify-center items-center w-full m-auto relative w-[500px] my-10">
         <label for="dropzone-file" class="flex flex-col justify-center items-center w-full h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
           <div class="flex flex-col justify-center items-center pt-5 pb-6">
             <svg aria-hidden="true" class="mb-3 w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload Cover</span> or drag and drop</p>
-            <p class="text-xs text-gray-500 dark:text-gray-400">PNG or JPG(MAX. 800x400px)</p>
+            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400 z-10"><span class="font-semibold">Click to upload Cover</span> or drag and drop</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 z-10">PNG or JPG(MAX. 800x400px)</p>
           </div>
+          <img v-if="blobImg" :src="blobImg" alt="uploadedImg" class="absolute w-full h-full top-0 left-0" />
           <input required id="dropzone-file" type="file" accept="image/jpeg, image/png, image/jpg" class="hidden" v-on:change="addImage" />
         </label>
+        <Trash v-if="blobImg" @click="blobImg = null" class="absolute top-3 cursor-pointer right-3 z-20" />
       </div>
       <div>
-        <textarea required v-model="form.content" class="focus:outline-none focus:ring-0 block m-auto border-none max-w-full" name="content" id="content" cols="120" rows="10"></textarea>
+        <textarea required v-model="form.content" class="focus:outline-none focus:ring-0 block m-auto focus:border-black/5 text-justify border-2 border-black/5 rounded-xl max-w-full" name="content" id="content" cols="120" rows="10"></textarea>
       </div>
       <div class="ml-auto flex gap-3">
         <button class="hover:border-primary hover:text-primary transition-all duration-300">
@@ -33,9 +35,12 @@ import axios from 'axios';
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 import Spinner from '../utils/Spinner.vue';
+import Trash from '../components/icons/Trash.vue';
 
 const route = useRoute();
 const dataLoaded = ref(false);
+const blobImg = ref(null);
+const token = localStorage.getItem('token');
 
 const authorId = parseInt(localStorage.getItem('authorId'));
 const form = ref({
@@ -46,6 +51,7 @@ let image = ref(null);
 
 const addImage = (e) => {
   const file = e.target.files[0];
+  blobImg.value = URL.createObjectURL(file);
   const reader = new FileReader();
   reader.readAsDataURL(file);
   reader.onload = () => {
@@ -55,7 +61,11 @@ const addImage = (e) => {
 const currentId = route.params.cerpenId;
 
 axios
-  .get(`${import.meta.env.VITE_APP_BASE_URL}/cerpen/${currentId}`)
+  .get(`${import.meta.env.VITE_APP_BASE_URL}/cerpen/${currentId}`, {
+    headers: {
+      Authorization: 'Bearer ' + token,
+    },
+  })
   .then((res) => {
     form.value = res.data.data;
     dataLoaded.value = true;
@@ -74,17 +84,25 @@ const handlePost = async () => {
     })
     .catch((err) => console.log(err))
     .finally(
-      axios.put(`${import.meta.env.VITE_APP_BASE_URL}/cerpen/${currentId}`, {
-        title: form.value.title,
-        content: form.value.content,
-        cover: image.value,
-        author_id: authorId,
-      })
-    )
-    .then((res) => {
-      console.log(res);
-      window.location.href = '/cerpen';
-    })
-    .catch((err) => console.log(err));
+      axios
+        .put(
+          `${import.meta.env.VITE_APP_BASE_URL}/cerpen/${currentId}`,
+          {
+            title: form.value.title,
+            content: form.value.content,
+            cover: image.value,
+            author_id: authorId,
+          },
+          {
+            headers: {
+              Authorization: 'Bearer ' + token,
+            },
+          }
+        )
+        .then((res) => {
+          window.location.href = '/cerpen';
+        })
+        .catch((err) => console.log(err))
+    );
 };
 </script>
