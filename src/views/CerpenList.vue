@@ -24,7 +24,7 @@
     </div>
     <div class="flex flex-wrap gap-5 relative justify-center md:justify-center">
       <div v-for="(cerpen, index) in filteredData(data)" :key="index">
-        <CerpenCard :title="cerpen.title" :date="moment(cerpen.created_at).format('DD MMMM YYYY')" :author="cerpen.author_id.toString()" :id="cerpen.id" :cover="cerpen.cover" :content="cerpen.content" :rating="cerpen.total_rating" :reviews="cerpen.total_reviewer" />
+        <CerpenCard :title="cerpen.title" :date="moment(cerpen.created_at).format('DD MMMM YYYY')" :author="cerpen.author" :id="cerpen.id" :cover="cerpen.cover" :content="cerpen.content" :rating="cerpen.total_rating" :reviews="cerpen.total_reviewer" />
       </div>
     </div>
   </div>

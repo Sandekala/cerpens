@@ -7,7 +7,7 @@
           <h5 class="mb-2 text-md font-bold tracking-tight text-gray-900 dark:text-white line-clamp-1">{{ title }}</h5>
           <table class="text-xs">
             <tr>
-              <td>Author ID</td>
+              <td>Author</td>
               <td>&nbsp;:&nbsp;</td>
               <td>
                 <span class="font-semibold">{{ author }}</span>
