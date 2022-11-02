@@ -7,7 +7,6 @@ import ReadCerpen from '../views/ReadCerpen.vue';
 import CreateCerpen from '../views/CreateCerpen.vue';
 import EditCerpen from '../views/EditCerpen.vue';
 import Dashboard from '../views/Dashboard.vue';
-import { supabase } from '../supabase/init';
 import currentUser from '../store/init';
 
 const routes = [

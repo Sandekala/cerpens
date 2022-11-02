@@ -33,6 +33,7 @@
 import axios from 'axios';
 import Trash from '../components/icons/Trash.vue';
 import { ref } from 'vue';
+import { supabase } from '@/supabase';
 
 const authorId = parseInt(localStorage.getItem('authorId'));
 const token = localStorage.getItem('token');
@@ -42,48 +43,37 @@ const form = ref({
   title: '',
   content: '',
 });
-let image = ref(null);
+const image = ref(null);
 
 const addImage = (e) => {
-  const file = e.target.files[0];
-  blobImg.value = URL.createObjectURL(file);
-  const reader = new FileReader();
-  reader.readAsDataURL(file);
-  reader.onload = () => {
-    image.value = reader.result;
-  };
+  image.value = e.target.files[0];
+  blobImg.value = URL.createObjectURL(image.value);
 };
 
 const handlePost = async () => {
-  const data = new FormData();
-  data.append('file', image.value);
-  data.append('upload_preset', 'pbtupgns');
-  data.append('cloud_name', 'dhx7fh9xc');
+  const { data } = await supabase.storage.from('cover-cerpen').upload(`cover/${Date.now()}-${image.value?.name}`, image.value);
+  const {
+    data: { publicUrl },
+  } = await supabase.storage.from('cover-cerpen').getPublicUrl(data.path);
+
   axios
-    .post('https://api.cloudinary.com/v1_1/dhx7fh9xc/image/upload', data)
-    .then((res) => {
-      image = res.data.url;
-    })
-    .then(
-      axios
-        .post(
-          `${import.meta.env.VITE_APP_BASE_URL}/cerpen`,
-          {
-            title: form.value.title,
-            content: form.value.content,
-            cover: image.value,
-            author_id: authorId,
-          },
-          {
-            headers: {
-              Authorization: 'Bearer ' + token,
-            },
-          }
-        )
-        .catch((err) => console.log(err))
-        .finally((res) => {
-          window.location.href = '/cerpen';
-        })
-    );
+    .post(
+      `${import.meta.env.VITE_APP_BASE_URL}/cerpen`,
+      {
+        title: form.value.title,
+        content: form.value.content,
+        cover: publicUrl,
+        author_id: authorId,
+      },
+      {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      }
+    )
+    .catch((err) => console.log(err))
+    .finally((res) => {
+      window.location.href = '/cerpen';
+    });
 };
 </script>
