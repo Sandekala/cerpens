@@ -10,7 +10,7 @@
               <td>Author</td>
               <td>&nbsp;:&nbsp;</td>
               <td>
-                <span class="font-semibold">{{ author }}</span>
+                <span class="font-semibold">{{ author ? author : 'You' }}</span>
               </td>
             </tr>
             <tr>
