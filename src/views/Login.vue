@@ -21,7 +21,7 @@
           </p>
         </div>
         <button type="submit" class="bg-primary rounded-md font-bold text-white h-9 hover:bg-transparent hover:border-2 hover:border-primary hover:text-primary transition-all duration-300">Login</button>
-        <button @click="loginAdmin" type="button" class="bg-primary rounded-md font-bold text-white h-9 hover:bg-transparent hover:border-2 hover:border-primary hover:text-primary transition-all duration-300">Login As Admin</button>
+        <button @click="loginAdmin" type="button" id="adminBtn" class="bg-primary rounded-md font-bold text-white h-9 hover:bg-transparent hover:border-2 hover:border-primary hover:text-primary transition-all duration-300">Login As Admin</button>
       </form>
     </div>
   </div>
@@ -50,6 +50,8 @@ const login = () => {
       localStorage.setItem('token', res.data.data.token);
       localStorage.setItem('name', res.data.data.name);
       localStorage.setItem('authorId', res.data.data.id);
+      localStorage.setItem('admin', res.data.data.is_admin);
+      localStorage.setItem('email', res.data.data.email);
 
       window.location.href = '/cerpen';
     })
@@ -70,6 +72,7 @@ const loginAdmin = () => {
       localStorage.setItem('name', res.data.data.name);
       localStorage.setItem('authorId', res.data.data.id);
       localStorage.setItem('admin', res.data.data.is_admin);
+      localStorage.setItem('email', res.data.data.email);
       window.location.href = '/dashboard';
     })
     .catch((err) => {

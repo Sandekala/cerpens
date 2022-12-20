@@ -7,6 +7,8 @@ import ReadCerpen from '../views/ReadCerpen.vue';
 import CreateCerpen from '../views/CreateCerpen.vue';
 import EditCerpen from '../views/EditCerpen.vue';
 import Dashboard from '../views/Dashboard.vue';
+import SearchResult from '../views/SearchResult.vue';
+import Profil from '../views/Profil.vue';
 import currentUser from '../store/init';
 
 const routes = [
@@ -48,6 +50,24 @@ const routes = [
     meta: {
       title: 'Cerpens',
       auth: false,
+    },
+  },
+  {
+    path: '/search',
+    name: 'SearchResult',
+    component: SearchResult,
+    meta: {
+      title: 'Cerpens',
+      auth: false,
+    },
+  },
+  {
+    path: '/profil',
+    name: 'Profil',
+    component: Profil,
+    meta: {
+      title: 'Profil',
+      auth: true,
     },
   },
   {
