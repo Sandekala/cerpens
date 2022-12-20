@@ -12,7 +12,7 @@
             <Clear @click="clearSearch" v-if="search !== ''"
               class="w-4 h-4 cursor-pointer absolute z-10 top-0 bottom-0 m-auto text-xs opacity-50 right-3" />
             <input v-on:input="handleChange" v-model="search" type="text" name="search" id="search"
-              class="w-full border-black/20 rounded-lg focus:ring-0 text-black" placeholder="Search Cerpens" />
+              class="w-full border-black/20 rounded-lg focus:ring-0 text-black" placeholder="Search" />
           </div>
         </form>
       </div>
@@ -213,6 +213,7 @@ const handleSearch = () => {
       .then((res) => {
         dataLoaded.value = true;
         data.value = res.data.data;
+        router.go()
       })
       .catch((err) => console.log(err));
   }
